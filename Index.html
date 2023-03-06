@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Openlayers Demostración</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.2.2/ol.css">
+    <script src="https://cdn.jsdelivr.net/npm/ol@v7.2.2/dist/ol.js"></script>
+    <link rel="stylesheet" href="script/ol-layerswitcher.css" type="text/css">
+    <script src="http://raw.githack.com/walkermatt/ol-layerswitcher/master/dist/ol-layerswitcher.js"></script>
+    <link rel="stylesheet" href="nouislider.css">
+    <script src="nouislider.min.js"></script>
+    
+  
+    
+    <style>
+        .map{
+            width: 700px;
+            height: 500px;
+        }
+        .layer-switcher{
+            font-family: sans-serif;
+            font-size: small;
+        }
+    </style>
+</head>
+<body>
+    <h1>openlayers Demo</h1>
+
+    <div id="map" class="map"></div>
+
+    <script>
+            
+            
+           
+            var lyrNDVI = new ol.layer.Tile({
+            title:'NDVI',
+            type:'base',
+            visible:true,
+            source: new ol.source.TileWMS({
+                url: "http://localhost:8080/geoserver/ejemplo/wms?",
+                params: {
+                    VERSION:'1.1.1',
+                    FORMAT:'image/png',
+                    TRANSPARENT:'true',
+                    LAYERS: 'ejemplo:i0004'                       
+            },
+                serverType: 'geoserver'
+                 })
+            })
+
+
+        var lyrGooglehibrido = new ol.layer.Tile({
+            title:'Google hibrido',
+            type:'base',
+            visible:true,
+            source: new ol.source.XYZ({
+                url: "https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
+            })
+        })
+
+         
+        var lyrGoogleSatelite = new ol.layer.Tile({
+            title:'Google Satelite',
+            type:'base',
+            visible:false,
+            source: new ol.source.XYZ({
+                url: "http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}"
+            })
+        })
+        var lyrGoogle = new ol.layer.Tile({
+            title:'Google',
+            type:'base',
+            visible:false,
+            source: new ol.source.XYZ({
+                url: "https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}"
+            })
+        })
+        var lyrOSM = new ol.layer.Tile({
+            title:'OSM',
+            type:'base',
+            visible:false,
+            source: new ol.source.OSM()
+        })
+        var map = new ol.Map({
+            target:'map',
+            layers:[
+            
+
+                new ol.layer.Group({
+                    title:'Mapa base',
+                    layers:[
+                        lyrOSM,
+                        lyrGoogleSatelite,
+                        lyrGoogle,
+                        lyrGooglehibrido
+                    ]
+                })
+                ,
+              lyrNDVI 
+            ],
+            view: new ol.View({
+                center:  ol.proj.fromLonLat([-102.000000, 22.500000]),
+                zoom:5,
+                maxZoom:30,
+                minZoom:1
+                        })
+        })
+
+
+
+        
+
+        /*var layerSwitcher = new ol.control.LayerSwitcher({
+            tipLabel: 'Leyemda', // Optional label for button
+            groupSelectStyle: 'children' // Can be 'children' [default], 'group' or 'none'
+        });
+        map.addControl(layerSwitcher);
+*/
+      
+
+
+
+
+
+
+
+
+
+       
+    </script>
+</body>
+</html>
